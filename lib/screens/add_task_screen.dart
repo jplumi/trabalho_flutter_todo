@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho_todo/database/dao/task_dao.dart';
+import 'package:trabalho_todo/database/entities/task.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({super.key});
+  AddTaskScreen({super.key});
+
+  String? textValue;
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +22,23 @@ class AddTaskScreen extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               child: TextField(
+                onChanged: (value) {
+                  textValue = value;
+                },
                 autofocus: true,
               ),
             ),
           ),
           Expanded(
             child: ElevatedButton(
-              onPressed: (() {}),
+              onPressed: () {
+                if (textValue != null) {
+                  Task task = Task(textValue!, false);
+                  Navigator.pop(context, task);
+                }
+              },
               child: const Text(
                 'Add',
                 style: TextStyle(fontSize: 28),

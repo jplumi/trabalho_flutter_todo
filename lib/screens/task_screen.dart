@@ -1,9 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho_todo/database/app_database.dart';
+import 'package:trabalho_todo/database/dao/task_dao.dart';
+import 'package:trabalho_todo/database/entities/task.dart';
 import 'package:trabalho_todo/screens/add_task_screen.dart';
 import 'package:trabalho_todo/widgets/tasks_list.dart';
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
+
+  @override
+  State<TasksScreen> createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  TaskDao? taskDao;
+  List<Task> tasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    openDatabase();
+  }
+
+  openDatabase() async {
+    final database =
+        await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    taskDao = database.taskDao;
+    tasks = await taskDao?.findAll() ?? [];
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +48,26 @@ class TasksScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightBlueAccent,
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: ((context) => const AddTaskScreen())));
+          Future future = Navigator.push(context,
+              MaterialPageRoute(builder: ((context) => AddTaskScreen())));
+          future.then((newTask) {
+            taskDao?.insertTask(newTask).then((value) {
+              if (value >= 0) {
+                setState(() {
+                  tasks.add(newTask);
+                });
+              }
+            });
+          });
         },
         child: const Icon(Icons.add),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-        child: TasksList(),
+        child: TasksList(
+          tasks: tasks,
+          taskDao: taskDao,
+        ),
       ),
     );
   }
