@@ -5,10 +5,12 @@ import 'package:trabalho_todo/database/entities/task.dart';
 class TaskTile extends StatefulWidget {
   Task task;
   TaskDao? taskDao;
+  Function(int taskId) onRemoveCallback;
 
   TaskTile({
     required this.task,
     required this.taskDao,
+    required this.onRemoveCallback,
     Key? key,
   }) : super(key: key);
 
@@ -27,7 +29,11 @@ class _TaskTileState extends State<TaskTile> {
         changeChecked(newValue);
       },
       onLongPress: () {
-        widget.taskDao?.deleteTask(widget.task);
+        widget.taskDao?.deleteTask(widget.task).then((value) {
+          if (value >= 1) {
+            widget.onRemoveCallback(widget.task.id!);
+          }
+        });
       },
       child: ListTile(
         title: Text(

@@ -3,7 +3,7 @@ import 'package:trabalho_todo/database/dao/task_dao.dart';
 import 'package:trabalho_todo/database/entities/task.dart';
 import 'package:trabalho_todo/widgets/task_tile.dart';
 
-class TasksList extends StatelessWidget {
+class TasksList extends StatefulWidget {
   TasksList({
     required this.tasks,
     required this.taskDao,
@@ -14,12 +14,24 @@ class TasksList extends StatelessWidget {
   TaskDao? taskDao;
 
   @override
+  State<TasksList> createState() => _TasksListState();
+}
+
+class _TasksListState extends State<TasksList> {
+  void removeTask(int taskId) {
+    setState(() {
+      widget.tasks.removeWhere((task) => task.id == taskId);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: tasks.length,
+      itemCount: widget.tasks.length,
       itemBuilder: (context, index) => TaskTile(
-        task: tasks[index],
-        taskDao: taskDao,
+        task: widget.tasks[index],
+        taskDao: widget.taskDao,
+        onRemoveCallback: removeTask,
       ),
     );
   }

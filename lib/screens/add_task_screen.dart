@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho_todo/database/dao/task_dao.dart';
 import 'package:trabalho_todo/database/entities/task.dart';
 
 class AddTaskScreen extends StatelessWidget {
