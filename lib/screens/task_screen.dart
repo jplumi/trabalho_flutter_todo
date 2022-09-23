@@ -36,14 +36,6 @@ class _TasksScreenState extends State<TasksScreen> {
       appBar: AppBar(
         backgroundColor: Colors.lightBlueAccent,
         title: const Text('Todo'),
-        actions: const [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.all(15),
-              child: Text('12 Tasks'),
-            ),
-          )
-        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightBlueAccent,
@@ -51,14 +43,16 @@ class _TasksScreenState extends State<TasksScreen> {
           Future future = Navigator.push(context,
               MaterialPageRoute(builder: ((context) => AddTaskScreen())));
           future.then((newTask) {
-            taskDao?.insertTask(newTask).then((taskId) {
-              if (taskId >= 0) {
-                newTask.id = taskId;
-                setState(() {
-                  tasks.add(newTask);
-                });
-              }
-            });
+            if (newTask != null) {
+              taskDao?.insertTask(newTask).then((taskId) {
+                if (taskId >= 0) {
+                  newTask.id = taskId;
+                  setState(() {
+                    tasks.add(newTask);
+                  });
+                }
+              });
+            }
           });
         },
         child: const Icon(Icons.add),
