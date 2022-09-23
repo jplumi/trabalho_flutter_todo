@@ -51,8 +51,9 @@ class _TasksScreenState extends State<TasksScreen> {
           Future future = Navigator.push(context,
               MaterialPageRoute(builder: ((context) => AddTaskScreen())));
           future.then((newTask) {
-            taskDao?.insertTask(newTask).then((value) {
-              if (value >= 0) {
+            taskDao?.insertTask(newTask).then((taskId) {
+              if (taskId >= 0) {
+                newTask.id = taskId;
                 setState(() {
                   tasks.add(newTask);
                 });

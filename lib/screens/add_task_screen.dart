@@ -22,7 +22,7 @@ class AddTaskScreen extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               child: TextField(
                 onChanged: (value) {
                   textValue = value;
