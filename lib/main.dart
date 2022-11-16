@@ -4,6 +4,7 @@ import 'package:trabalho_todo/firebase_options.dart';
 import 'package:trabalho_todo/screens/task_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
