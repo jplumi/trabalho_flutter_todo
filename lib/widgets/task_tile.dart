@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:trabalho_todo/controller/task_controller.dart';
 import 'package:trabalho_todo/entities/task.dart';
 
-class TaskTile extends StatefulWidget {
+class TaskTile extends StatelessWidget {
   Task task;
   Function(int taskId) onRemoveCallback;
+
+  final _controller = Get.find<TaskController>();
 
   TaskTile({
     required this.task,
@@ -12,39 +16,28 @@ class TaskTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TaskTile> createState() => _TaskTileState();
-}
-
-class _TaskTileState extends State<TaskTile> {
-  @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key(widget.task.id.toString()),
+      key: Key(task.id.toString()),
       onDismissed: (direction) {
-        // widget.taskDao?.deleteTask(widget.task).then((value) {
-        //   if (value >= 1) {
-        //     widget.onRemoveCallback(widget.task.id!);
-        //   }
-        // });
+        _controller.removeTask(task.id);
       },
       child: InkWell(
         onTap: () {
-          bool newValue = !widget.task.done;
-          widget.task.done = newValue;
-          // widget.taskDao?.updateTask(widget.task);
+          bool newValue = !task.done;
+          task.done = newValue;
           changeChecked(newValue);
         },
         onLongPress: () {},
         child: ListTile(
           title: Text(
-            widget.task.taskText,
+            task.desc,
             style: TextStyle(
-                decoration:
-                    widget.task.done ? TextDecoration.lineThrough : null),
+                decoration: task.done ? TextDecoration.lineThrough : null),
           ),
           trailing: Checkbox(
             activeColor: Colors.blueGrey,
-            value: widget.task.done,
+            value: task.done,
             onChanged: changeChecked,
           ),
         ),
@@ -53,8 +46,6 @@ class _TaskTileState extends State<TaskTile> {
   }
 
   void changeChecked(bool? value) {
-    setState(() {
-      widget.task.done = value!;
-    });
+    _controller.updateTask(task.id!, value!);
   }
 }

@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho_todo/entities/task.dart';
+import 'package:get/get.dart';
+import 'package:trabalho_todo/controller/task_controller.dart';
 import 'package:trabalho_todo/screens/add_task_screen.dart';
-import 'package:trabalho_todo/widgets/tasks_list.dart';
+import 'package:trabalho_todo/widgets/task_tile.dart';
 
-class TasksScreen extends StatefulWidget {
-  const TasksScreen({super.key});
+class TasksScreen extends StatelessWidget {
+  TasksScreen({super.key});
 
-  @override
-  State<TasksScreen> createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-  List<Task> tasks = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final _controller = Get.put(TaskController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +18,7 @@ class _TasksScreenState extends State<TasksScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              _showDeleteDialog();
+              _showDeleteDialog(context);
             },
             icon: const Icon(Icons.delete),
           )
@@ -36,30 +27,23 @@ class _TasksScreenState extends State<TasksScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blueGrey,
         onPressed: () {
-          Future future = Navigator.push(context,
-              MaterialPageRoute(builder: ((context) => AddTaskScreen())));
-          future.then((newTask) {
-            if (newTask != null) {
-              // taskDao?.insertTask(newTask).then((taskId) {
-              //   if (taskId >= 0) {
-              //     newTask.id = taskId;
-              //     setState(() {
-              //       tasks.add(newTask);
-              //     });
-              //   }
-              // });
-            }
-          });
+          Get.to(AddTaskScreen());
         },
         child: const Icon(Icons.add),
       ),
-      body: TasksList(
-        tasks: tasks,
+      body: Obx(
+        () => ListView.builder(
+          itemCount: _controller.tasks.length,
+          itemBuilder: (context, index) => TaskTile(
+            task: _controller.tasks.values.elementAt(index),
+            onRemoveCallback: Get.find<TaskController>().removeTask,
+          ),
+        ),
       ),
     );
   }
 
-  Future<void> _showDeleteDialog() async {
+  Future<void> _showDeleteDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -77,23 +61,13 @@ class _TasksScreenState extends State<TasksScreen> {
             TextButton(
               child: const Text('Yes, delete'),
               onPressed: () {
-                _deleteAllTasks();
-                Navigator.of(context).pop();
+                print('delete all tasks');
+                Get.back();
               },
             ),
           ],
         );
       },
     );
-  }
-
-  void _deleteAllTasks() {
-    // taskDao?.deleteAllTasks().then(
-    //   (value) {
-    //     setState(() {
-    //       tasks.clear();
-    //     });
-    //   },
-    // );
   }
 }

@@ -1,7 +1,14 @@
 class Task {
-  int? id;
-  String taskText;
+  String? id;
+  String desc;
   bool done;
 
-  Task(this.taskText, this.done, {this.id});
+  Task(this.desc, this.done, {this.id});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'desc': desc,
+      'done': done,
+    };
+  }
 }

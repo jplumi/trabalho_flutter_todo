@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:trabalho_todo/controller/task_controller.dart';
 import 'package:trabalho_todo/entities/task.dart';
 
 class AddTaskScreen extends StatelessWidget {
@@ -49,8 +51,9 @@ class AddTaskScreen extends StatelessWidget {
               ),
               onPressed: () {
                 if (textValue != null) {
-                  Task task = Task(textValue!, false);
-                  Navigator.pop(context, task);
+                  Task newTask = Task(textValue!, false);
+                  Get.find<TaskController>().addTask(newTask);
+                  Get.back();
                 }
               },
               child: const Text(
