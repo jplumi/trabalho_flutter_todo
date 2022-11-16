@@ -1,8 +1,4 @@
-import 'package:floor/floor.dart';
-
-@entity
 class Task {
-  @PrimaryKey(autoGenerate: true)
   int? id;
   String taskText;
   bool done;

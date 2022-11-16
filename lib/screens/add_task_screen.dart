@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho_todo/database/entities/task.dart';
+import 'package:trabalho_todo/entities/task.dart';
 
 class AddTaskScreen extends StatelessWidget {
   AddTaskScreen({super.key});
@@ -10,7 +10,6 @@ class AddTaskScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlueAccent,
         title: const Text('New Task'),
         centerTitle: true,
       ),
@@ -23,6 +22,19 @@ class AddTaskScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               child: TextField(
+                cursorColor: Colors.blueGrey,
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blueAccent,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blueGrey,
+                    ),
+                  ),
+                ),
                 onChanged: (value) {
                   textValue = value;
                 },
@@ -32,6 +44,9 @@ class AddTaskScreen extends StatelessWidget {
           ),
           Expanded(
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueGrey,
+              ),
               onPressed: () {
                 if (textValue != null) {
                   Task task = Task(textValue!, false);

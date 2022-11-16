@@ -1,7 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:trabalho_todo/firebase_options.dart';
 import 'package:trabalho_todo/screens/task_screen.dart';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const TodoApp());
 }
 
@@ -10,10 +15,10 @@ class TodoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      title: 'Todo',
-      home: TasksScreen(),
+      home: const TasksScreen(),
     );
   }
 }
